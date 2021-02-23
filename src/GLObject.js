@@ -11,8 +11,9 @@ export class GLObject {
     // public gl: WebGL2RenderingContext;
 
 
-    constructor(id, shader, gl) {
+    constructor(id, shape, shader, gl) {
         this.id = id;
+        this.shape = shape;
         this.shader = shader;
         this.gl = gl;
     }
@@ -97,7 +98,12 @@ export class GLObject {
         gl.uniformMatrix3fv(uniformPos, false, this.projectionMat)
         gl.uniform4fv(uniformCol, [1.0, 0.0, 0.0, 1.0])
         gl.enableVertexAttribArray(vertexPos)
-        gl.drawArrays(gl.TRIANGLES, 0, this.va.length/2)
+        if(this.shape.trim() === "TRIANGLE"){
+            gl.drawArrays(gl.TRIANGLES, 0, this.va.length/2)
+        } else if(this.shape.trim() === "LINE") {
+            gl.drawArrays(gl.LINES, 0, this.va.length/2)
+        }
+
     }
 
     drawSelect(selectProgram) {
@@ -124,6 +130,10 @@ export class GLObject {
             ((id >> 24) & 0xFF) / 0xFF,
         ]
         gl.uniform4fv(uniformCol, uniformId)
-        gl.drawArrays(gl.TRIANGLES, 0, this.va.length/2)
+        if(this.shape.trim() === "TRIANGLE"){
+            gl.drawArrays(gl.TRIANGLES, 0, this.va.length/2)
+        } else if(this.shape.trim() === "LINE") {
+            gl.drawArrays(gl.LINES, 0, this.va.length/2)
+        }
     }
 }

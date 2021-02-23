@@ -3,6 +3,6 @@
 Untuk memulai, langsung buka `src/index.html` di browser
 
 Dikerjakan Oleh : 
-- Farid Lazuarda
+- Muhammad Farid Adilazuarda
 - Marholop Sembiring 
 - Fabian Zhafransyah

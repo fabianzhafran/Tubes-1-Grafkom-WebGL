@@ -97,29 +97,28 @@ function main() {
         150.0, 100.0
     ]
     
-    let triangleData2 = [
-        400, 400.0,
-        400.0, 450.0,
-        450.0, 400.0
+    let lineData = [
+        200, 200.0,
+        250.0, 250.0
     ]
 
-    let glObject = new GLObject(0, shaderProgram, gl)
-    glObject.setVertexArray(triangleData)
-    glObject.setPosition(0,0)
-    glObject.setRotation(0)
-    glObject.setScale(1,1)
-    glObject.bind()
+    let triangleObject = new GLObject(0, "TRIANGLE", shaderProgram, gl)
+    triangleObject.setVertexArray(triangleData)
+    triangleObject.setPosition(0,0)
+    triangleObject.setRotation(0)
+    triangleObject.setScale(1,1)
+    triangleObject.bind()
 
-    let glObject2 = new GLObject(1, shaderProgram, gl)
-    glObject2.setVertexArray(triangleData)
-    glObject2.setPosition(0,100)
-    glObject2.setRotation(0)
-    glObject2.setScale(1,1)
-    glObject2.bind()
+    let lineObject = new GLObject(1, "LINE", shaderProgram, gl)
+    lineObject.setVertexArray(lineData)
+    lineObject.setPosition(0,100)
+    lineObject.setRotation(0)
+    lineObject.setScale(1,1)
+    lineObject.bind()
 
     let renderer = new Renderer()
-    renderer.addObject(glObject)
-    renderer.addObject(glObject2)
+    renderer.addObject(triangleObject)
+    renderer.addObject(lineObject)
 
     function render() {
         gl.clearColor(1,1,1,1)
