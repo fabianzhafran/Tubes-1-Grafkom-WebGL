@@ -106,8 +106,12 @@ function main() {
     let triangleData2 = [
         400, 400.0,
         450.0, 450.0,
+<<<<<<< Updated upstream
         400.0, 450.0,
         // 0,0
+>>>>>>> Stashed changes
+=======
+        450.0, 400.0
 >>>>>>> Stashed changes
     ]
 
