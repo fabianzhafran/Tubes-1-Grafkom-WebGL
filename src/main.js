@@ -99,7 +99,7 @@ function main() {
     
     let triangleData2 = [
         400, 400.0,
-        400.0, 450.0,
+        450.0, 450.0,
         450.0, 400.0
     ]
 
@@ -111,7 +111,7 @@ function main() {
     glObject.bind()
 
     let glObject2 = new GLObject(1, 'LINES', shaderProgram, gl)
-    glObject2.setVertexArray(triangleData)
+    glObject2.setVertexArray(triangleData2)
     glObject2.setPosition(0,100)
     glObject2.setRotation(0)
     glObject2.setScale(1,1)
