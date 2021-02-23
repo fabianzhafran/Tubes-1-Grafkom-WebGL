@@ -3,7 +3,7 @@ import { multiplyMatrix } from './utils/matrix.js'
 export class GLObject {
     // public id: number;
     // public va: number[];
-    // public shader: WebGLProgram;
+    // public program: WebGLProgram;
     // public pos: [number, number];
     // public rot: number;
     // public scale: [number, number];
@@ -11,31 +11,32 @@ export class GLObject {
     // public gl: WebGL2RenderingContext;
 
 
-    constructor(id, shader, gl) {
-        this.id = id;
-        this.shader = shader;
-        this.gl = gl;
+    constructor(id, type, program, gl) {
+        this.id = id
+        this.type = type
+        this.program = program
+        this.gl = gl
     }
 
     setVertexArray(va) {
-        this.va = va;
+        this.va = va
     }
 
 
     setPosition(x, y) {
-        this.pos = [x,y];
+        this.pos = [x,y]
         this.projectionMat = this.calcProjectionMatrix()
     }
 
 
     setRotation(rot) {
-        this.rot = rot;
+        this.rot = rot
         this.projectionMat = this.calcProjectionMatrix()
     }
 
 
     setScale(x, y) {
-        this.scale = [x,y];
+        this.scale = [x,y]
         this.projectionMat = this.calcProjectionMatrix()
     }
 
@@ -82,22 +83,26 @@ export class GLObject {
 
     bind() {
         const gl = this.gl
-        const vbo = gl.createBuffer()
-        gl.bindBuffer(gl.ARRAY_BUFFER, vbo)
+        const buffer = gl.createBuffer()
+        gl.bindBuffer(gl.ARRAY_BUFFER, buffer)
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.va), gl.STATIC_DRAW)
     }
 
     draw() {
         const gl = this.gl
-        gl.useProgram(this.shader)
-        var vertexPos = gl.getAttribLocation(this.shader, 'a_pos')
-        var uniformCol = gl.getUniformLocation(this.shader, 'u_fragColor')
-        var uniformPos = gl.getUniformLocation(this.shader, 'u_proj_mat')
+        gl.useProgram(this.program)
+        var vertexPos = gl.getAttribLocation(this.program, 'a_pos')
+        var uniformCol = gl.getUniformLocation(this.program, 'u_fragColor')
+        var uniformPos = gl.getUniformLocation(this.program, 'u_proj_mat')
         gl.vertexAttribPointer(vertexPos, 2, gl.FLOAT, false, 0, 0)
         gl.uniformMatrix3fv(uniformPos, false, this.projectionMat)
         gl.uniform4fv(uniformCol, [1.0, 0.0, 0.0, 1.0])
         gl.enableVertexAttribArray(vertexPos)
-        gl.drawArrays(gl.TRIANGLES, 0, this.va.length/2)
+        if (this.type === 'TRIANGLES') {
+            gl.drawArrays(gl.TRIANGLES, 0, this.va.length/2)
+        } else if (this.type === 'LINES') {
+            gl.drawArrays(gl.LINES, 0, this.va.length/2)
+        }
     }
 
     drawSelect(selectProgram) {
@@ -124,6 +129,10 @@ export class GLObject {
             ((id >> 24) & 0xFF) / 0xFF,
         ]
         gl.uniform4fv(uniformCol, uniformId)
-        gl.drawArrays(gl.TRIANGLES, 0, this.va.length/2)
+        if (this.type === 'TRIANGLES') {
+            gl.drawArrays(gl.TRIANGLES, 0, this.va.length/2)
+        } else if (this.type === 'LINES') {
+            gl.drawArrays(gl.LINES, 0, this.va.length/2)
+        }
     }
 }

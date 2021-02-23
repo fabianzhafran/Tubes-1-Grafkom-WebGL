@@ -103,14 +103,14 @@ function main() {
         450.0, 400.0
     ]
 
-    let glObject = new GLObject(0, shaderProgram, gl)
+    let glObject = new GLObject(0, 'TRIANGLES', shaderProgram, gl)
     glObject.setVertexArray(triangleData)
     glObject.setPosition(0,0)
     glObject.setRotation(0)
     glObject.setScale(1,1)
     glObject.bind()
 
-    let glObject2 = new GLObject(1, shaderProgram, gl)
+    let glObject2 = new GLObject(1, 'LINES', shaderProgram, gl)
     glObject2.setVertexArray(triangleData)
     glObject2.setPosition(0,100)
     glObject2.setRotation(0)
