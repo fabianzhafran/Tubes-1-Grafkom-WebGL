@@ -94,12 +94,21 @@ function main() {
     let triangleData = [
         100, 100.0,
         100.0, 150.0,
-        150.0, 100.0
+        150.0, 100.0,
+        0,0
     ]
     
+<<<<<<< Updated upstream
     let lineData = [
         200, 200.0,
         250.0, 250.0
+=======
+    let triangleData2 = [
+        400, 400.0,
+        450.0, 450.0,
+        400.0, 450.0,
+        // 0,0
+>>>>>>> Stashed changes
     ]
 
     let triangleObject = new GLObject(0, "TRIANGLE", shaderProgram, gl)
@@ -109,12 +118,21 @@ function main() {
     triangleObject.setScale(1,1)
     triangleObject.bind()
 
+<<<<<<< Updated upstream
     let lineObject = new GLObject(1, "LINE", shaderProgram, gl)
     lineObject.setVertexArray(lineData)
     lineObject.setPosition(0,100)
     lineObject.setRotation(0)
     lineObject.setScale(1,1)
     lineObject.bind()
+=======
+    let glObject2 = new GLObject(1, 'LINES', shaderProgram, gl)
+    glObject2.setVertexArray(triangleData2)
+    glObject2.setPosition(0,100)
+    glObject2.setRotation(0)
+    glObject2.setScale(1,1)
+    glObject2.bind()
+>>>>>>> Stashed changes
 
     let renderer = new Renderer()
     renderer.addObject(triangleObject)
