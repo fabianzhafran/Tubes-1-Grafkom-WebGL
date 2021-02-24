@@ -23,7 +23,7 @@ class GLObject {
 
 
     setPosition(x, y) {
-        this.pos = [x,y]
+        this.pos = [0, 0]
         this.projectionMat = this.calcProjectionMatrix()
     }
 

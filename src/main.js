@@ -226,6 +226,7 @@ function main(jsonObj) {
         const pixelY = gl.canvas.height - appState.mousePos.y * gl.canvas.height / canvas.clientHeight - 1
         const data = new Uint8Array(4)
         gl.readPixels(pixelX, pixelY, 1,1, gl.RGBA, gl.UNSIGNED_BYTE, data)
+        console.log(pixelX, pixelY)
         const id = data[0] + (data[1] << 8) + (data[2] << 16) + (data[3] << 24)
         // console.log(id)
 
@@ -244,9 +245,28 @@ function main(jsonObj) {
                     if (obj.id === id) {
                         let Dx = appState.mousePos.x - appState.mousePosBefore.x
                         let Dy = -1 * (appState.mousePos.y - appState.mousePosBefore.y)
-                        let newX = obj.pos[0] + Dx
-                        let newY = obj.pos[1] + Dy
-                        obj.setPosition(newX, newY)
+                        let temp = [...obj.va]
+                        let clickUjung = false;
+
+                        for (let a = 0; a < temp.length; a += 2) {
+                            // detect ujung
+                            if (Math.abs(temp[a] - pixelX) < 20 && Math.abs(temp[a + 1] - pixelY) < 20) {
+                                clickUjung = true
+                                temp[a] += Dx
+                                temp[a + 1] += Dy
+                                // console.log(temp)
+                            }
+                        }
+                        if (!clickUjung) {
+                            for (let a = 0; a < temp.length; a++) {
+                                if (a % 2 === 0) {
+                                    temp[a] += Dx
+                                } else {
+                                    temp[a] += Dy
+                                }
+                            }
+                        }
+                        obj.setVertexArray(temp)
                     }
                 });
             }
