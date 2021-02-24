@@ -76,12 +76,16 @@ colorButton.addEventListener('click', (event) => {
 // help handler
 document.getElementById('help').addEventListener('click', () => {
     // Isi help disini
-    alert('    Bla bla bla Bla bla bla Bla bla \n\
-    bla Bla bla bla Bla bla bla Bla bla bla \n\
-    Bla bla bla Bla bla bla Bla bla bla Bla \n\
-    bla bla Bla bla bla Bla bla bla Bla bla bla \n\
-    Bla bla bla Bla bla bla Bla bla bla Bla bla \n\
-    bla Bla bla bla Bla bla bla Bla bla bla ')
+    alert(' \n\
+        Langkah Penggunaan Website: \n\
+        1. Masukkan file .json pada folder \n\
+        2. Pastikan format file .json sudah sesuai dan memiliki atribut id, shape, posisi, color, dan array of vertices\n\
+        3. Untuk memulai inisialisasi pembuatan objek pada canvas, tekan tombol "choose File" kemudian pilih file json yang ingin digunakan \n\
+        4. Kemudian gambar dari objek akan ditampilkan sesuai dengan spesifikasi yang ada pada json file \n\
+        5. Jika ingin melakukan resize, pastikan telah membuat dan mengklik objek persegi. Kemudian isi field disebelah tombol resize sesuai skala yang diinginkan, kemudian tekan tombol resize. \n\
+        6. Jika ingin mengubah warna objek, pertama klik dulu objeknya, kemudian pilih warna disebelah tombol "Change Color". \n\
+        7. Anda bisa menyimpan file dari gambar yang telah anda buat kedalam sebuah file json dengan menekan tombol "Save"\n\
+    ')
 })
 
 // input file handler
