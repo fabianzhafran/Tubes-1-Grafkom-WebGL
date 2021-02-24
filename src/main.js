@@ -87,9 +87,7 @@ document.getElementById('help').addEventListener('click', () => {
 // input file handler
 var jsonObj
 
-document.getElementById('input-file').addEventListener('change', getFile)
-
-function getFile(event) {
+document.getElementById('input-file').addEventListener('change', (event) => {
 	const input = event.target
     const file = input.files[0]
     
@@ -102,7 +100,7 @@ function getFile(event) {
             main(jsonObj)
         }).catch(error => console.log(error))
     }
-}
+})
 
 function readFileContent(file) {
 	const reader = new FileReader()
@@ -112,6 +110,7 @@ function readFileContent(file) {
     reader.readAsText(file)
   })
 }
+
 
 canvas.width = 800
 canvas.height = 600
@@ -181,6 +180,31 @@ function main(jsonObj) {
 
     let renderer = new Renderer()
     renderer.setObjectList(objectsToDraw)
+
+    // download json handler
+    document.getElementById('save').addEventListener('click', () => {
+        download(renderer.objectList, 'json.txt', 'json');
+    })
+
+    function download(objectList, fileName, contentType) {
+        var a = document.createElement("a");
+        var objectToWrite = {
+            objects: []
+        }
+        objectList.forEach((obj) => {
+            objectToWrite.objects.push({
+                id: obj.id,
+                shape: obj.type,
+                pos: obj.pos,
+                color: obj.color,
+                vertices: obj.va
+            })
+        })
+        var file = new Blob([JSON.stringify(objectToWrite)], {type: contentType});
+        a.href = URL.createObjectURL(file);
+        a.download = fileName;
+        a.click();
+    }
 
     function render() {
         gl.clearColor(1,1,1,1)
