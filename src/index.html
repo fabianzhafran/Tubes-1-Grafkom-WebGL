@@ -3,22 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AwooCAD</title>
+    <title>Pusing</title>
     <style>
-        html, body {
+        html {
             width: 100vw;
             height: 100vh;
             margin: 0;
+            background-color: black;
         }
-        canvas {
-            margin: 0;
+        body {
             width: 100%;
             height: 100%;
         }
+        canvas {
+            margin: 0;
+            width: 80%;
+        }
     </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <canvas id="webgl-app"></canvas>
+    <div class="ok">
+        <canvas id="webgl-app"></canvas>
+        <div>
+            <div>
+                <div>
+                    <label for="input-file">Upload File</label><br>
+                    <input type="file" id="input-file">
+                </div>
+            </div>
+            <input type="text" id="resize-input" name="resize-input">
+            <button id="resize-button">Resize</button>
+            <div>
+                <select id="change-color" name="change-color">
+                    <option value="1">Red</option>
+                    <option value="2">Blue</option>
+                    <option value="3">Green</option>
+                    <option value="4">Yellow</option>
+                </select>
+                <button id="change-color-button">Change Color</button>
+            </div>
+            <button id="help">Help</button>
+        </div>
+    </div>
     <script src="main.js" type="module"></script>
 </body>
 </html>

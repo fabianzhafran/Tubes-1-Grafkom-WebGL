@@ -13,6 +13,10 @@ export class Renderer {
         this.count++
     }
 
+    setObjectList(objList) {
+        this.objectList = [...objList]
+    }
+
 
     removeObject(id) {
         const idx = this.objectList.findIndex(obj => obj.id === id)
@@ -23,12 +27,15 @@ export class Renderer {
 
     render() {
         for (const obj of this.objectList) {
+            // console.log(obj.id)
+            obj.bind()
             obj.draw()
         }
     }
 
     renderTex(selectProgram) {
         for (const obj of this.objectList) {
+            obj.bind()
             obj.drawSelect(selectProgram)
         }
     }

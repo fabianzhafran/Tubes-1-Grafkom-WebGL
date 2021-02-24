@@ -4,8 +4,8 @@ import { Renderer } from './renderer.js'
 console.log(GLObject)
 import { createShader } from './loaders/shader.js'
 
-
 let appState = {
+    clickedObjId : -1,
     mousePos : {
         x: 0,
         y: 0
@@ -15,8 +15,14 @@ let appState = {
         y: 0
     },
     mouseMoving : false,
-    mouseClicking : false
+    mouseClicking : false,
+    resizeValue :  1,
+    resizing : false,
+    changeColorValue : 1,
+    changingColor : false
 }
+
+// canvas setup
 var canvas = document.getElementById('webgl-app')
 
 canvas.addEventListener('mousemove', (event) => {
@@ -39,12 +45,80 @@ canvas.addEventListener('mouseup', () => {
     appState.mouseClicking = false
 })
 
+// resize handler
+var resizeButton = document.getElementById('resize-button')
+
+resizeButton.addEventListener('click', (event) => {
+    var inputValue = document.getElementById('resize-input').value
+    appState.resizeValue = inputValue
+    appState.resizing = true
+    // console.log(appState.resize)
+})
+
+// color handler
+var colorButton = document.getElementById('change-color-button')
+
+const colorMap = {
+    '1' : [1.0, 0.0, 0.0, 1.0],
+    '2' : [0.0, 0.0, 1.0, 1.0],
+    '3' : [0.0, 1.0, 0.0, 1.0],
+    '4' : [1.0, 1.0, 0.0, 1.0],
+}
+
+colorButton.addEventListener('click', (event) => {
+    var colorValue = document.getElementById('change-color').value
+    console.log(colorValue)
+    appState.changeColorValue = colorValue
+    appState.changingColor = true
+    // console.log(appState.resize)
+})
+
+// help handler
+document.getElementById('help').addEventListener('click', () => {
+    // Isi help disini
+    alert('    Bla bla bla Bla bla bla Bla bla \n\
+    bla Bla bla bla Bla bla bla Bla bla bla \n\
+    Bla bla bla Bla bla bla Bla bla bla Bla \n\
+    bla bla Bla bla bla Bla bla bla Bla bla bla \n\
+    Bla bla bla Bla bla bla Bla bla bla Bla bla \n\
+    bla Bla bla bla Bla bla bla Bla bla bla ')
+})
+
+// input file handler
+var jsonObj
+
+document.getElementById('input-file').addEventListener('change', getFile)
+
+function getFile(event) {
+	const input = event.target
+    const file = input.files[0]
+    
+    if ('files' in input && input.files.length > 0) {
+        readFileContent(file).then(content => {
+            jsonObj = JSON.parse(content)
+            // alert(typeof jsonObj)
+            // var jsonObject = JSON.parse(JSON.stringify(jsonObj))
+            console.log(jsonObj);
+            main(jsonObj)
+        }).catch(error => console.log(error))
+    }
+}
+
+function readFileContent(file) {
+	const reader = new FileReader()
+  return new Promise((resolve, reject) => {
+    reader.onload = event => resolve(event.target.result)
+    reader.onerror = error => reject(error)
+    reader.readAsText(file)
+  })
+}
+
 canvas.width = 800
 canvas.height = 600
 
 var gl = canvas.getContext('webgl2')
 
-function main() {
+function main(jsonObj) {
     if (!gl) {
         alert('Your browser does not support WebGL')
         return
@@ -91,35 +165,22 @@ function main() {
     gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, depBuf)
 
     // create object and draw
-    let triangleData = [
-        100, 100.0,
-        100.0, 150.0,
-        150.0, 100.0
-    ]
-    
-    let triangleData2 = [
-        400, 400.0,
-        400.0, 450.0,
-        450.0, 400.0
-    ]
-
-    let glObject = new GLObject(0, 'TRIANGLES', shaderProgram, gl)
-    glObject.setVertexArray(triangleData)
-    glObject.setPosition(0,0)
-    glObject.setRotation(0)
-    glObject.setScale(1,1)
-    glObject.bind()
-
-    let glObject2 = new GLObject(1, 'LINES', shaderProgram, gl)
-    glObject2.setVertexArray(triangleData)
-    glObject2.setPosition(0,100)
-    glObject2.setRotation(0)
-    glObject2.setScale(1,1)
-    glObject2.bind()
+    let objectsToDraw = []
+    let id = 0
+    jsonObj.objects.forEach((object) => {
+        let glObject = new GLObject(id, object.shape, shaderProgram, gl)
+        // console.log(object.shape)
+        glObject.setVertexArray(object.vertices)
+        glObject.setPosition(object.pos[0], object.pos[1])
+        glObject.setRotation(0)
+        glObject.setScale(1,1)
+        glObject.changeColor(object.color)
+        objectsToDraw.push(glObject)
+        id += 1
+    })
 
     let renderer = new Renderer()
-    renderer.addObject(glObject)
-    renderer.addObject(glObject2)
+    renderer.setObjectList(objectsToDraw)
 
     function render() {
         gl.clearColor(1,1,1,1)
@@ -148,19 +209,81 @@ function main() {
         setTimeout(() => {
             appState.mouseMoving = false
         }, 1)
-        if (appState.mouseMoving && appState.mouseClicking && id !== -1) {
+        
+        if (id !== -1) {
+            if (appState.mouseClicking) {
+                appState.clickedObjId = id
+            }
+            console.log(appState.clickedObjId)
+            if (appState.mouseMoving && appState.mouseClicking) {
+                renderer.objectList.forEach(obj => {
+                    if (obj.id === id) {
+                        let Dx = appState.mousePos.x - appState.mousePosBefore.x
+                        let Dy = -1 * (appState.mousePos.y - appState.mousePosBefore.y)
+                        let newX = obj.pos[0] + Dx
+                        let newY = obj.pos[1] + Dy
+                        obj.setPosition(newX, newY)
+                    }
+                });
+            }
+        }
+        if (appState.resizing) {
             renderer.objectList.forEach(obj => {
-                if (obj.id === id) {
-                    let Dx = appState.mousePos.x - appState.mousePosBefore.x
-                    let Dy = -1 * (appState.mousePos.y - appState.mousePosBefore.y)
-                    let newX = obj.pos[0] + Dx
-                    let newY = obj.pos[1] + Dy
+                if (obj.id === appState.clickedObjId) {
+                    appState.resizing = false;
+                    if (obj.type === 'SQUARE') {
+                        obj.va[3] = obj.va[3] * appState.resizeValue
+                        obj.va[4] = obj.va[4] * appState.resizeValue
+                        obj.va[6] = obj.va[6] * appState.resizeValue
+                        obj.va[7] = obj.va[7] * appState.resizeValue
+                        obj.va[8] = obj.va[8] * appState.resizeValue
+                        obj.va[11] = obj.va[11] * appState.resizeValue
+                    } else if (obj.type === 'LINES') {
+                        const konstanta = appState.resizeValue
+                        let x0 = obj.va[0]
+                        let x1 = obj.va[2]
+                        let y0 = obj.va[1]
+                        let y1 = obj.va[3]
+                        let xmin = Math.min(x0, x1)
+                        let ymin = Math.min(y0, y1)
+                        x0 -= xmin
+                        x1 -= xmin
+                        y0 -= ymin
+                        y1 -= ymin
+                        if (x1 === 0) {
+                            x1 *= konstanta
+                        } else {
+                            x0 *= konstanta
+                        }
+                        if (y0 === 0) {
+                            y1 *= konstanta
+                        } else {
+                            y0 *= konstanta
+                        }
+                        x0 += xmin
+                        x1 += xmin
+                        y0 += ymin
+                        y1 += ymin
+                        obj.va[0] = x0
+                        obj.va[2] = x1
+                        obj.va[1] = y0
+                        obj.va[3] = y1
+                    } else {
+                        alert('Object must be a SQUARE')
+                    }
                     // console.log(obj.va)
-                    obj.setPosition(newX, newY)
-                    obj.bind()
                 }
             });
-            // console.log([appState.mousePos.x - appState.mousePosBefore.x, appState.mousePos.y - appState.mousePosBefore.y])
+        }
+        if (appState.changingColor) {
+            renderer.objectList.forEach(obj => {
+                if (obj.id === appState.clickedObjId) {
+                    appState.changingColor = false;
+                    console.log(colorMap[appState.changeColorValue])
+                    obj.changeColor(colorMap[appState.changeColorValue])
+                    // console.log(obj.va)
+                }
+            });
         }
 
         gl.bindFramebuffer(gl.FRAMEBUFFER, null)
@@ -172,4 +295,4 @@ function main() {
     requestAnimationFrame(render)
 }
 
-main()
+// main()

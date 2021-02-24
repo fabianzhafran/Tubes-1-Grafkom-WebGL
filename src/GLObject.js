@@ -15,6 +15,7 @@ export class GLObject {
         this.id = id
         this.type = type
         this.program = program
+        this.color = [1.0, 0.0, 0.0, 1.0]
         this.gl = gl
     }
 
@@ -81,11 +82,16 @@ export class GLObject {
         this.va = polygonCoords
     }
 
+    changeColor(color) {
+        this.color = color
+    }
+
     bind() {
         const gl = this.gl
-        const buffer = gl.createBuffer()
-        gl.bindBuffer(gl.ARRAY_BUFFER, buffer)
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.va), gl.STATIC_DRAW)
+        const vertexArray = this.va
+        gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer())
+        // console.log(this.va)
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertexArray), gl.DYNAMIC_DRAW)
     }
 
     draw() {
@@ -96,12 +102,14 @@ export class GLObject {
         var uniformPos = gl.getUniformLocation(this.program, 'u_proj_mat')
         gl.vertexAttribPointer(vertexPos, 2, gl.FLOAT, false, 0, 0)
         gl.uniformMatrix3fv(uniformPos, false, this.projectionMat)
-        gl.uniform4fv(uniformCol, [1.0, 0.0, 0.0, 1.0])
+        gl.uniform4fv(uniformCol, this.color)
         gl.enableVertexAttribArray(vertexPos)
         if (this.type === 'TRIANGLES') {
             gl.drawArrays(gl.TRIANGLES, 0, this.va.length/2)
         } else if (this.type === 'LINES') {
             gl.drawArrays(gl.LINES, 0, this.va.length/2)
+        } else if (this.type === 'SQUARE') {
+            gl.drawArrays(gl.TRIANGLES, 0, this.va.length/2)
         }
     }
 
@@ -133,6 +141,8 @@ export class GLObject {
             gl.drawArrays(gl.TRIANGLES, 0, this.va.length/2)
         } else if (this.type === 'LINES') {
             gl.drawArrays(gl.LINES, 0, this.va.length/2)
+        } else if (this.type === 'SQUARE') {
+            gl.drawArrays(gl.TRIANGLES, 0, this.va.length/2)
         }
     }
 }
