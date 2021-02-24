@@ -102,6 +102,8 @@ export class GLObject {
             gl.drawArrays(gl.TRIANGLES, 0, this.va.length/2)
         } else if (this.type === 'LINES') {
             gl.drawArrays(gl.LINES, 0, this.va.length/2)
+        } else if (this.type === 'SQUARE') {
+            gl.drawArrays(gl.TRIANGLES, 0, this.va.length/2)
         }
     }
 
@@ -133,6 +135,8 @@ export class GLObject {
             gl.drawArrays(gl.TRIANGLES, 0, this.va.length/2)
         } else if (this.type === 'LINES') {
             gl.drawArrays(gl.LINES, 0, this.va.length/2)
+        } else if (this.type === 'SQUARE') {
+            gl.drawArrays(gl.TRIANGLES, 0, this.va.length/2)
         }
     }
 }

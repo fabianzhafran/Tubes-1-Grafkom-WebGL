@@ -103,6 +103,15 @@ function main() {
         450.0, 400.0
     ]
 
+    let triangleData3 = [
+        200, 200.0,
+        200.0, 250.0,
+        250.0, 200.0,
+        250.0, 250.0,
+        250.0, 200.0,
+        200.0, 250.0,
+    ]
+
     let glObject = new GLObject(0, 'TRIANGLES', shaderProgram, gl)
     glObject.setVertexArray(triangleData)
     glObject.setPosition(0,0)
@@ -117,9 +126,17 @@ function main() {
     glObject2.setScale(1,1)
     glObject2.bind()
 
+    let glObject3 = new GLObject(2, 'SQUARE', shaderProgram, gl)
+    glObject3.setVertexArray(triangleData3)
+    glObject3.setPosition(200,0)
+    glObject3.setRotation(0)
+    glObject3.setScale(1,1)
+    glObject3.bind()
+
     let renderer = new Renderer()
     renderer.addObject(glObject)
     renderer.addObject(glObject2)
+    renderer.addObject(glObject3)
 
     function render() {
         gl.clearColor(1,1,1,1)
