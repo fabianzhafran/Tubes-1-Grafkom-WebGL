@@ -289,7 +289,7 @@ function main(jsonObj) {
                         obj.va[1] = y0
                         obj.va[3] = y1
                     } else {
-                        alert('Object must be a SQUARE')
+                        alert('Object must be a SQUARE or a LINE')
                     }
                     // console.log(obj.va)
                 }
