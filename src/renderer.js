@@ -23,6 +23,7 @@ export class Renderer {
 
     render() {
         for (const obj of this.objectList) {
+            // console.log(obj);
             obj.draw()
         }
     }

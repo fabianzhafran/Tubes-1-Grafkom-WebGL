@@ -4,6 +4,24 @@ import { Renderer } from './renderer.js'
 console.log(GLObject)
 import { createShader } from './loaders/shader.js'
 
+document.getElementById('input-file').addEventListener('change', getFile)
+
+// var jsonObject
+
+
+// console.log(jsonObj)
+
+
+// var jsonObject = JSON.parse();
+
+// function readFileContent(file) {
+// 	const reader = new FileReader()
+//   return new Promise((resolve, reject) => {
+//     reader.onload = event => resolve(event.target.result)
+//     reader.onerror = error => reject(error)
+//     reader.readAsText(file)
+//   })
+// }
 
 let appState = {
     mousePos : {
@@ -44,7 +62,7 @@ canvas.height = 600
 
 var gl = canvas.getContext('webgl2')
 
-function main() {
+function main(jsonObj) {
     if (!gl) {
         alert('Your browser does not support WebGL')
         return
@@ -91,12 +109,14 @@ function main() {
     gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, depBuf)
 
     // create object and draw
-    let triangleData = [
-        100, 100.0,
-        100.0, 150.0,
-        150.0, 100.0
-    ]
+    let triangleId = jsonObj.id
+    console.log(jsonObj.id)
+    console.log(jsonObj.shape)
+    // console.log(jsonObj.shape)
+    let triangleShape = jsonObj.shape.toString();
     
+    let triangleData = jsonObj.vertices
+
     let triangleData2 = [
         400, 400.0,
         450.0, 450.0,
@@ -112,7 +132,7 @@ function main() {
         200.0, 250.0,
     ]
 
-    let glObject = new GLObject(0, 'TRIANGLES', shaderProgram, gl)
+    let glObject = new GLObject(triangleId, triangleShape, shaderProgram, gl)
     glObject.setVertexArray(triangleData)
     glObject.setPosition(0,0)
     glObject.setRotation(0)
@@ -135,8 +155,8 @@ function main() {
 
     let renderer = new Renderer()
     renderer.addObject(glObject)
-    renderer.addObject(glObject2)
-    renderer.addObject(glObject3)
+    // renderer.addObject(glObject2)
+    // renderer.addObject(glObject3)
 
     function render() {
         gl.clearColor(1,1,1,1)
@@ -189,4 +209,28 @@ function main() {
     requestAnimationFrame(render)
 }
 
-main()
+var jsonObj
+
+function getFile(event) {
+	const input = event.target
+    const file = input.files[0]
+    
+    if ('files' in input && input.files.length > 0) {
+        readFileContent(file).then(content => {
+            jsonObj = JSON.parse(content)
+            // alert(typeof jsonObj)
+            // var jsonObject = JSON.parse(JSON.stringify(jsonObj))
+            console.log(jsonObj.vertices);
+            main(jsonObj)
+        }).catch(error => console.log(error))
+    }
+}
+
+function readFileContent(file) {
+	const reader = new FileReader()
+  return new Promise((resolve, reject) => {
+    reader.onload = event => resolve(event.target.result)
+    reader.onerror = error => reject(error)
+    reader.readAsText(file)
+  })
+}

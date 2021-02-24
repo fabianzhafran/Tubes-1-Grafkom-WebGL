@@ -4,6 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AwooCAD</title>
+
+    <div>
+        <label for="input-file">Upload File</label><br>
+        <input type="file" id="input-file">
+    </div>
+
+    <textarea id="content-target"></textarea>
+
+
     <style>
         html, body {
             width: 100vw;
@@ -15,10 +24,19 @@
             width: 100%;
             height: 100%;
         }
+        label {
+            cursor: pointer;
+        }
+
+        textarea {
+            width: 400px;
+            height: 150px;
+        }
     </style>
 </head>
 <body>
     <canvas id="webgl-app"></canvas>
     <script src="main.js" type="module"></script>
+    <script src="openfile.js" type="module"></script>
 </body>
 </html>
