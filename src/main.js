@@ -57,6 +57,75 @@ canvas.addEventListener('mouseup', () => {
     appState.mouseClicking = false
 })
 
+// resize handler
+var resizeButton = document.getElementById('resize-button')
+
+resizeButton.addEventListener('click', (event) => {
+    var inputValue = document.getElementById('resize-input').value
+    appState.resizeValue = inputValue
+    appState.resizing = true
+    // console.log(appState.resize)
+})
+
+// color handler
+var colorButton = document.getElementById('change-color-button')
+
+const colorMap = {
+    '1' : [1.0, 0.0, 0.0, 1.0],
+    '2' : [0.0, 0.0, 1.0, 1.0],
+    '3' : [0.0, 1.0, 0.0, 1.0],
+    '4' : [1.0, 1.0, 0.0, 1.0],
+}
+
+colorButton.addEventListener('click', (event) => {
+    var colorValue = document.getElementById('change-color').value
+    console.log(colorValue)
+    appState.changeColorValue = colorValue
+    appState.changingColor = true
+    // console.log(appState.resize)
+})
+
+// help handler
+document.getElementById('help').addEventListener('click', () => {
+    // Isi help disini
+    alert(' \n\
+        Langkah Penggunaan Website: \n\
+        1. Masukkan file .json pada folder \n\
+        2. Pastikan format file .json sudah sesuai dan memiliki atribut id, shape, posisi, color, dan array of vertices\n\
+        3. Intuk memulai inisialisasi pembuatan objek pada canvas, tekan tombol "choose File" kemudian pilih file json yang ingin digunakan \n\
+        4. asd\n\
+    \n\
+    ')
+})
+
+// input file handler
+var jsonObj
+
+document.getElementById('input-file').addEventListener('change', (event) => {
+	const input = event.target
+    const file = input.files[0]
+    
+    if ('files' in input && input.files.length > 0) {
+        readFileContent(file).then(content => {
+            jsonObj = JSON.parse(content)
+            // alert(typeof jsonObj)
+            // var jsonObject = JSON.parse(JSON.stringify(jsonObj))
+            console.log(jsonObj);
+            main(jsonObj)
+        }).catch(error => console.log(error))
+    }
+})
+
+function readFileContent(file) {
+	const reader = new FileReader()
+  return new Promise((resolve, reject) => {
+    reader.onload = event => resolve(event.target.result)
+    reader.onerror = error => reject(error)
+    reader.readAsText(file)
+  })
+}
+
+
 canvas.width = 800
 canvas.height = 600
 
