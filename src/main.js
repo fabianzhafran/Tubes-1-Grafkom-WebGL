@@ -1,8 +1,4 @@
-import { multiplyMatrix } from './utils/matrix.js'
-import { GLObject } from './GLObject.js'
-import { Renderer } from './renderer.js'
 console.log(GLObject)
-import { createShader } from './loaders/shader.js'
 
 let appState = {
     clickedObjId : -1,
@@ -297,7 +293,7 @@ function main(jsonObj) {
                         obj.va[1] = y0
                         obj.va[3] = y1
                     } else {
-                        alert('Object must be a SQUARE')
+                        alert('Object must be a SQUARE or a LINE')
                     }
                     // console.log(obj.va)
                 }

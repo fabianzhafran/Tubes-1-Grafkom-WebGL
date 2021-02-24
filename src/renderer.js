@@ -1,4 +1,4 @@
-export class Renderer {
+class Renderer {
     // public objectList: Array<GLObject>;
     // public count: number;
 
