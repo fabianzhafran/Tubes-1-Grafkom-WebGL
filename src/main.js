@@ -1,8 +1,4 @@
-import { multiplyMatrix } from './utils/matrix.js'
-import { GLObject } from './GLObject.js'
-import { Renderer } from './renderer.js'
 console.log(GLObject)
-import { createShader } from './loaders/shader.js'
 
 let appState = {
     clickedObjId : -1,

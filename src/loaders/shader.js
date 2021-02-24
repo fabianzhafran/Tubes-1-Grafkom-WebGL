@@ -42,7 +42,7 @@ const shaders = {
     }`
 }
 
-export function loadShader (gl, type, source) {
+function loadShader (gl, type, source) {
     const rawShader = shaders[source]
     const shader = gl.createShader(type)
     gl.shaderSource(shader, rawShader)
@@ -57,12 +57,12 @@ export function loadShader (gl, type, source) {
 
 
 
-export function fetchShader(source) {
+function fetchShader(source) {
     const shader = shaders[source]
     return shader
 }
 
-export function createShader(gl, vert, frag) {
+function createShader(gl, vert, frag) {
     const vs = loadShader(gl, gl.VERTEX_SHADER, vert)
     const fs = loadShader(gl, gl.FRAGMENT_SHADER, frag)
     const shaderProgram = gl.createProgram()

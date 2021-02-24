@@ -1,6 +1,4 @@
-import { multiplyMatrix } from './utils/matrix.js'
-
-export class GLObject {
+class GLObject {
     // public id: number;
     // public va: number[];
     // public program: WebGLProgram;
@@ -58,28 +56,6 @@ export class GLObject {
         ]
         const projectionMat = multiplyMatrix(scaleMat, translateMat)
         return projectionMat
-    }
-
-    createPolygonCoords() {
-        let coordinates = this.va
-        let polygonCoords = []
-        let counter = 0
-        let x0 = coordinates[0]
-        let y0 = coordinates[1]
-        for (let i = 2; i < coordinates.length - 3; i += 2) {
-            // console.log('~~~~')
-            // console.log(i)
-            // console.log(i+1)
-            // console.log(i+2)
-            // console.log(i+3)
-            polygonCoords.push(x0)
-            polygonCoords.push(y0)
-            polygonCoords.push(coordinates[i])
-            polygonCoords.push(coordinates[i+1])
-            polygonCoords.push(coordinates[i+2])
-            polygonCoords.push(coordinates[i+3])
-        }
-        this.va = polygonCoords
     }
 
     changeColor(color) {
