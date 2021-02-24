@@ -250,7 +250,7 @@ function main(jsonObj) {
 
                         for (let a = 0; a < temp.length; a += 2) {
                             // detect ujung
-                            if (Math.abs(temp[a] - pixelX) < 20 && Math.abs(temp[a + 1] - pixelY) < 20) {
+                            if (Math.abs(temp[a] - pixelX) < 10 && Math.abs(temp[a + 1] - pixelY) < 10) {
                                 clickUjung = true
                                 temp[a] += Dx
                                 temp[a + 1] += Dy
