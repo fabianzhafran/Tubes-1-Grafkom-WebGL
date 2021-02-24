@@ -274,7 +274,7 @@ function main(jsonObj) {
                         x1 -= xmin
                         y0 -= ymin
                         y1 -= ymin
-                        if (x1 === 0) {
+                        if (x0 === 0) {
                             x1 *= konstanta
                         } else {
                             x0 *= konstanta
